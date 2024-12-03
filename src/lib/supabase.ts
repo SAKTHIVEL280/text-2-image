@@ -1,10 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_LOVABLE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_LOVABLE_SUPABASE_ANON_KEY
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Please make sure you have connected your Supabase project in the Lovable dashboard')
-}
+const supabaseUrl = 'https://nqdimisbsaxoynbqizwh.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xZGltaXNic2F4b3luYnFpendoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzMyMTkzMzYsImV4cCI6MjA0ODc5NTMzNn0.76LR51YUQRyBrV93deutzuzx8ZWlUDaMIeqbsJ7ETUY'
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
