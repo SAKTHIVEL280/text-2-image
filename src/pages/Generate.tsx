@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { Loader } from "lucide-react";
+import { Loader, Download } from "lucide-react";
 
 export default function Generate() {
   const [prompt, setPrompt] = useState("");
@@ -29,6 +29,32 @@ export default function Generate() {
       title: "Success!",
       description: "Image generated successfully",
     });
+  };
+
+  const handleDownload = async () => {
+    try {
+      const response = await fetch(generatedImage);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `generated-image-${Date.now()}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        title: "Success!",
+        description: "Image downloaded successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to download image",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -68,6 +94,14 @@ export default function Generate() {
               className="w-full h-auto"
             />
           </div>
+          <Button
+            onClick={handleDownload}
+            className="w-full"
+            variant="outline"
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Download Image
+          </Button>
         </div>
       )}
     </div>
