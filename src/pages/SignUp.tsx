@@ -16,12 +16,9 @@ export default function SignUp() {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
       });
 
       if (error) {
@@ -35,10 +32,9 @@ export default function SignUp() {
 
       toast({
         title: "Success!",
-        description: "Please check your email to verify your account.",
+        description: "Account created successfully. You can now sign in.",
       });
       
-      // We'll redirect to signin after successful signup
       navigate("/signin");
     } catch (error) {
       toast({
