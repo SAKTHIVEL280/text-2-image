@@ -6,12 +6,14 @@ import { Loader, Download, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
+const GENERATION_SERVER = "http://localhost:3001"; // Your local server address
+
 export default function Generate() {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState("");
   const [imageSize, setImageSize] = useState("landscape");
-  const [imageType, setImageType] = useState("realistic"); // new state for image type
+  const [imageType, setImageType] = useState("realistic");
   const navigate = useNavigate();
 
   const handleGenerate = async () => {
@@ -25,16 +27,40 @@ export default function Generate() {
     }
 
     setIsGenerating(true);
-    // TODO: Implement actual generation with selected size and type
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    const size = imageSize === "landscape" ? "800/600" : "600/800";
-    setGeneratedImage(`https://picsum.photos/${size}`);
-    setIsGenerating(false);
-    
-    toast({
-      title: "Success!",
-      description: "Image generated successfully",
-    });
+    try {
+      const response = await fetch(`${GENERATION_SERVER}/generate`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt,
+          imageType,
+          imageSize,
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (!data.success) {
+        throw new Error(data.error || 'Generation failed');
+      }
+
+      setGeneratedImage(`${GENERATION_SERVER}${data.imageUrl}`);
+      
+      toast({
+        title: "Success!",
+        description: "Image generated successfully",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to generate image",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleDownload = async () => {
