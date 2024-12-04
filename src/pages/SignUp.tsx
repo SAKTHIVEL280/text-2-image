@@ -13,6 +13,17 @@ export default function SignUp() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate password length
+    if (password.length < 6) {
+      toast({
+        variant: "destructive",
+        title: "Invalid Password",
+        description: "Password must be at least 6 characters long.",
+      });
+      return;
+    }
+
     setIsLoading(true);
 
     try {
