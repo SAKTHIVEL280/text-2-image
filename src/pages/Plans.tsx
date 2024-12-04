@@ -1,68 +1,157 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Check } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { ArrowRight } from "lucide-react";
+
+const plans = [
+  {
+    name: "Free",
+    price: "$0",
+    features: [
+      "5 images per day",
+      "Basic image styles",
+      "Standard resolution",
+      "Community support"
+    ],
+    buttonText: "Get Started",
+    popular: false
+  },
+  {
+    name: "Premium",
+    price: "$9.99",
+    features: [
+      "Unlimited images",
+      "All image styles",
+      "High resolution",
+      "Priority support",
+      "Custom aspect ratios",
+      "Advanced editing tools"
+    ],
+    buttonText: "Go Premium",
+    popular: true
+  }
+];
+
+const exampleImages = [
+  {
+    url: "https://images.unsplash.com/photo-1518877593221-1f28583780b4",
+    alt: "AI Generated Whale",
+    caption: "Realistic Nature"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+    alt: "AI Generated Art",
+    caption: "Digital Art"
+  },
+  {
+    url: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+    alt: "AI Generated Portrait",
+    caption: "Portrait Style"
+  }
+];
 
 export default function Plans() {
   const navigate = useNavigate();
 
-  const handleSelectPlan = async (plan: string) => {
-    if (plan === "free") {
+  const handlePlanSelect = (planName: string) => {
+    if (planName === "Premium") {
+      // Simulate payment processing
+      toast({
+        title: "Processing Payment",
+        description: "Redirecting to payment gateway...",
+      });
+      // In a real app, you would integrate with a payment provider here
+      setTimeout(() => {
+        toast({
+          title: "Demo Mode",
+          description: "This is a demo. In a real app, payment processing would occur here.",
+        });
+        navigate("/generate");
+      }, 2000);
+    } else {
       navigate("/generate");
-      return;
     }
-    
-    // Simulate payment processing
-    toast({
-      title: "Redirecting to payment",
-      description: "You will be redirected to complete your payment.",
-    });
-    
-    // TODO: Implement actual payment integration
-    // For now, we'll simulate a delay and redirect
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    navigate("/generate");
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h1 className="text-4xl font-bold gradient-text mb-12">Choose Your Plan</h1>
-      <div className="grid md:grid-cols-2 gap-8 max-w-4xl w-full">
-        <div className="auth-card p-6 space-y-4">
-          <h2 className="text-2xl font-bold text-center">Free Plan</h2>
-          <p className="text-center text-muted-foreground">Perfect for trying out</p>
-          <div className="text-3xl font-bold text-center">₹0</div>
-          <ul className="space-y-2">
-            <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-primary" /> 2 generations per day</li>
-            <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-primary" /> Basic quality</li>
-            <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-primary" /> Basic support</li>
-          </ul>
-          <Button onClick={() => handleSelectPlan("free")} className="w-full">
-            Select Free Plan
-          </Button>
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4">
+      <div className="max-w-7xl mx-auto space-y-16">
+        {/* Header Section */}
+        <div className="text-center space-y-4">
+          <h1 className="text-4xl font-bold gradient-text">Choose Your Plan</h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Select the perfect plan for your creative needs. Transform your ideas into stunning visuals.
+          </p>
         </div>
-        <div className="auth-card p-6 space-y-4 border-primary relative">
-          <div className="absolute top-0 right-0 bg-primary px-3 py-1 rounded-bl-lg rounded-tr-lg text-sm">
-            Popular
+
+        {/* Plans Grid */}
+        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          {plans.map((plan) => (
+            <Card key={plan.name} className={`p-6 relative ${plan.popular ? 'border-primary' : ''}`}>
+              {plan.popular && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-medium">
+                  Most Popular
+                </span>
+              )}
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-bold">{plan.name}</h2>
+                  <p className="text-4xl font-bold gradient-text">{plan.price}</p>
+                  <p className="text-muted-foreground">per month</p>
+                </div>
+                <ul className="space-y-3">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-center gap-2">
+                      <ArrowRight className="h-4 w-4 text-primary" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button 
+                  className="w-full"
+                  variant={plan.popular ? "default" : "outline"}
+                  onClick={() => handlePlanSelect(plan.name)}
+                >
+                  {plan.buttonText}
+                </Button>
+              </div>
+            </Card>
+          ))}
+        </div>
+
+        {/* Example Images Section */}
+        <div className="space-y-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold gradient-text">Example Generations</h2>
+            <p className="text-muted-foreground mt-2">
+              Discover what you can create with our AI image generation
+            </p>
           </div>
-          <h2 className="text-2xl font-bold text-center">Pro Creator</h2>
-          <p className="text-center text-muted-foreground">For serious creators</p>
-          <div className="space-y-1">
-            <div className="text-3xl font-bold text-center">₹40</div>
-            <div className="text-center text-muted-foreground">per month</div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {exampleImages.map((image) => (
+              <div key={image.alt} className="space-y-3">
+                <div className="aspect-video overflow-hidden rounded-lg border">
+                  <img
+                    src={image.url}
+                    alt={image.alt}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <p className="text-center font-medium">{image.caption}</p>
+              </div>
+            ))}
           </div>
-          <ul className="space-y-2">
-            <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-primary" /> Unlimited generations</li>
-            <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-primary" /> High quality output</li>
-            <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-primary" /> Priority support</li>
-            <li className="flex items-center"><Check className="mr-2 h-4 w-4 text-primary" /> Advanced features</li>
-          </ul>
-          <Button onClick={() => handleSelectPlan("pro")} className="w-full">
-            Select Pro Plan
+        </div>
+
+        {/* FAQ or Additional Info */}
+        <div className="text-center space-y-4 pb-8">
+          <p className="text-muted-foreground">
+            All plans include access to our basic features. Upgrade anytime to unlock premium capabilities.
+          </p>
+          <Button variant="link" onClick={() => navigate("/")}>
+            Learn more about our features
           </Button>
-          <div className="text-center text-sm text-muted-foreground">
-            Or ₹400/year (Save 17%)
-          </div>
         </div>
       </div>
     </div>
