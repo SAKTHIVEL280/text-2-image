@@ -14,7 +14,6 @@ export default function SignUp() {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validate password length
     if (password.length < 6) {
       toast({
         variant: "destructive",
@@ -30,6 +29,9 @@ export default function SignUp() {
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/signin`,
+        },
       });
 
       if (error) {
@@ -43,7 +45,7 @@ export default function SignUp() {
 
       toast({
         title: "Success!",
-        description: "Account created successfully. You can now sign in.",
+        description: "Please check your email to verify your account before signing in.",
       });
       
       navigate("/signin");

@@ -1,12 +1,26 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 export default function Plans() {
   const navigate = useNavigate();
 
-  const handleSelectPlan = (plan: string) => {
-    // TODO: Implement actual subscription
+  const handleSelectPlan = async (plan: string) => {
+    if (plan === "free") {
+      navigate("/generate");
+      return;
+    }
+    
+    // Simulate payment processing
+    toast({
+      title: "Redirecting to payment",
+      description: "You will be redirected to complete your payment.",
+    });
+    
+    // TODO: Implement actual payment integration
+    // For now, we'll simulate a delay and redirect
+    await new Promise(resolve => setTimeout(resolve, 1500));
     navigate("/generate");
   };
 
@@ -27,7 +41,7 @@ export default function Plans() {
             Select Free Plan
           </Button>
         </div>
-        <div className="auth-card p-6 space-y-4 border-primary">
+        <div className="auth-card p-6 space-y-4 border-primary relative">
           <div className="absolute top-0 right-0 bg-primary px-3 py-1 rounded-bl-lg rounded-tr-lg text-sm">
             Popular
           </div>

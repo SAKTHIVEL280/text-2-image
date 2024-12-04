@@ -10,7 +10,8 @@ export default function Generate() {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState("");
-  const [imageSize, setImageSize] = useState("landscape"); // landscape or portrait
+  const [imageSize, setImageSize] = useState("landscape");
+  const [imageType, setImageType] = useState("realistic"); // new state for image type
   const navigate = useNavigate();
 
   const handleGenerate = async () => {
@@ -24,7 +25,7 @@ export default function Generate() {
     }
 
     setIsGenerating(true);
-    // TODO: Implement actual generation with selected size
+    // TODO: Implement actual generation with selected size and type
     await new Promise(resolve => setTimeout(resolve, 2000));
     const size = imageSize === "landscape" ? "800/600" : "600/800";
     setGeneratedImage(`https://picsum.photos/${size}`);
@@ -77,16 +78,33 @@ export default function Generate() {
       </div>
       
       <div className="space-y-4">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Image Size</label>
-          <ToggleGroup type="single" value={imageSize} onValueChange={(value) => value && setImageSize(value)} className="justify-start">
-            <ToggleGroupItem value="landscape" aria-label="Landscape">
-              Landscape
-            </ToggleGroupItem>
-            <ToggleGroupItem value="portrait" aria-label="Portrait">
-              Portrait
-            </ToggleGroupItem>
-          </ToggleGroup>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Image Size</label>
+            <ToggleGroup type="single" value={imageSize} onValueChange={(value) => value && setImageSize(value)} className="justify-start">
+              <ToggleGroupItem value="landscape" aria-label="Landscape">
+                Landscape
+              </ToggleGroupItem>
+              <ToggleGroupItem value="portrait" aria-label="Portrait">
+                Portrait
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Image Style</label>
+            <ToggleGroup type="single" value={imageType} onValueChange={(value) => value && setImageType(value)} className="justify-start">
+              <ToggleGroupItem value="realistic" aria-label="Realistic">
+                Realistic
+              </ToggleGroupItem>
+              <ToggleGroupItem value="artistic" aria-label="Artistic">
+                Artistic
+              </ToggleGroupItem>
+              <ToggleGroupItem value="anime" aria-label="Anime">
+                Anime
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </div>
 
         <Textarea
