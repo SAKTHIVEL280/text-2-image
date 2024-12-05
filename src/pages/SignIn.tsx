@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { ArrowLeft } from "lucide-react";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -22,6 +23,14 @@ export default function SignIn() {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="auth-card w-full max-w-md space-y-6">
+        <Button 
+          variant="ghost" 
+          className="absolute top-4 left-4"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
+        </Button>
         <div className="space-y-2 text-center">
           <h1 className="text-3xl font-bold gradient-text">Welcome Back</h1>
           <p className="text-muted-foreground">Sign in to continue generating amazing images</p>
