@@ -44,9 +44,52 @@
 }
 
 .auth-card {
-  @apply p-8 rounded-lg border bg-card text-card-foreground shadow-lg;
+  @apply p-8 rounded-lg border bg-card text-card-foreground shadow-lg 
+    backdrop-blur-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600
+    hover:from-purple-500 hover:to-pink-700 transition-all duration-300;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes scale-up {
+  0% {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-scale-up {
+  animation: scale-up 0.5s ease-out forwards;
+}
+
+.hover-card {
+  @apply transition-all duration-500 hover:shadow-xl hover:-translate-y-2 
+    backdrop-blur-sm bg-card/30 hover:bg-card/50;
+}
+
+.button-hover {
+  @apply transition-all duration-300 hover:scale-105 active:scale-95 
+    hover:shadow-lg hover:shadow-primary/20;
 }

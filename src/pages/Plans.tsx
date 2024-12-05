@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
-import { ArrowRight, Sparkles, Crown } from "lucide-react";
+import { ArrowRight, Sparkles, Crown, ArrowLeft } from "lucide-react";
 
 const plans = [
   {
@@ -80,11 +80,21 @@ export default function Plans() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4">
       <div className="max-w-7xl mx-auto space-y-16">
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold gradient-text animate-fade-in">Choose Your Plan</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-in">
-            Select the perfect plan for your creative needs. Transform your ideas into stunning visuals.
-          </p>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate(-1)}
+            className="shrink-0 hover:bg-background/80 transition-all duration-300 rounded-full hover:scale-110 active:scale-95"
+          >
+            <ArrowLeft className="h-4 w-4" />
+          </Button>
+          <div className="text-center flex-1 space-y-4">
+            <h1 className="text-4xl font-bold gradient-text animate-fade-in">Choose Your Plan</h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto animate-fade-in">
+              Select the perfect plan for your creative needs. Transform your ideas into stunning visuals.
+            </p>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
