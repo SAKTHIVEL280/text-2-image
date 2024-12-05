@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { Loader, Download, ArrowLeft, Wand2, LayoutLandscape, LayoutPortrait } from "lucide-react";
+import { Loader, Download, ArrowLeft, Wand2, Rectangle, RectangleVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
@@ -157,7 +157,7 @@ export default function Generate() {
                   aria-label="Landscape"
                   className="rounded-full data-[state=on]:bg-primary/20 hover:bg-primary/10 transition-all duration-300 hover:scale-105"
                 >
-                  <LayoutLandscape className="h-4 w-4 mr-2" />
+                  <Rectangle className="h-4 w-4 mr-2" />
                   Landscape
                 </ToggleGroupItem>
                 <ToggleGroupItem 
@@ -165,7 +165,7 @@ export default function Generate() {
                   aria-label="Portrait"
                   className="rounded-full data-[state=on]:bg-primary/20 hover:bg-primary/10 transition-all duration-300 hover:scale-105"
                 >
-                  <LayoutPortrait className="h-4 w-4 mr-2" />
+                  <RectangleVertical className="h-4 w-4 mr-2" />
                   Portrait
                 </ToggleGroupItem>
               </ToggleGroup>
