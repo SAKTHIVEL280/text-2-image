@@ -2,18 +2,17 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { Loader, Download, ArrowLeft } from "lucide-react";
+import { Loader, Download, ArrowLeft, Wand2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
-const GENERATION_SERVER = "http://localhost:3001"; // Your local server address
+const GENERATION_SERVER = "http://localhost:3001";
 
 export default function Generate() {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState("");
-  const [imageSize, setImageSize] = useState("landscape");
-  const [imageType, setImageType] = useState("realistic");
+  const [imageStyle, setImageStyle] = useState("realistic");
   const navigate = useNavigate();
 
   const handleGenerate = async () => {
@@ -35,8 +34,7 @@ export default function Generate() {
         },
         body: JSON.stringify({
           prompt,
-          imageType,
-          imageSize,
+          imageStyle,
         }),
       });
 
@@ -96,37 +94,48 @@ export default function Generate() {
           variant="ghost"
           size="icon"
           onClick={() => navigate(-1)}
-          className="shrink-0"
+          className="shrink-0 hover:bg-background/80 transition-colors rounded-full"
         >
           <ArrowLeft className="h-4 w-4" />
         </Button>
-        <h1 className="text-4xl font-bold gradient-text text-center flex-1">Text to Image</h1>
+        <div className="flex-1 text-center space-y-2 animate-fade-in">
+          <h1 className="text-4xl font-bold gradient-text flex items-center justify-center gap-3">
+            <Wand2 className="h-8 w-8" />
+            AI Image Generator
+          </h1>
+          <p className="text-muted-foreground">Transform your imagination into stunning visuals</p>
+        </div>
       </div>
       
-      <div className="space-y-4">
+      <div className="space-y-6 animate-fade-in">
         <div className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Image Size</label>
-            <ToggleGroup type="single" value={imageSize} onValueChange={(value) => value && setImageSize(value)} className="justify-start">
-              <ToggleGroupItem value="landscape" aria-label="Landscape">
-                Landscape
-              </ToggleGroupItem>
-              <ToggleGroupItem value="portrait" aria-label="Portrait">
-                Portrait
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Image Style</label>
-            <ToggleGroup type="single" value={imageType} onValueChange={(value) => value && setImageType(value)} className="justify-start">
-              <ToggleGroupItem value="realistic" aria-label="Realistic">
+            <label className="text-sm font-medium">Art Style</label>
+            <ToggleGroup 
+              type="single" 
+              value={imageStyle} 
+              onValueChange={(value) => value && setImageStyle(value)} 
+              className="justify-start gap-2"
+            >
+              <ToggleGroupItem 
+                value="realistic" 
+                aria-label="Realistic"
+                className="rounded-full data-[state=on]:bg-primary/20 hover:bg-primary/10 transition-colors"
+              >
                 Realistic
               </ToggleGroupItem>
-              <ToggleGroupItem value="artistic" aria-label="Artistic">
+              <ToggleGroupItem 
+                value="artistic" 
+                aria-label="Artistic"
+                className="rounded-full data-[state=on]:bg-primary/20 hover:bg-primary/10 transition-colors"
+              >
                 Artistic
               </ToggleGroupItem>
-              <ToggleGroupItem value="anime" aria-label="Anime">
+              <ToggleGroupItem 
+                value="anime" 
+                aria-label="Anime"
+                className="rounded-full data-[state=on]:bg-primary/20 hover:bg-primary/10 transition-colors"
+              >
                 Anime
               </ToggleGroupItem>
             </ToggleGroup>
@@ -137,11 +146,12 @@ export default function Generate() {
           placeholder="Describe the image you want to generate..."
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
-          className="h-32"
+          className="h-32 rounded-2xl transition-all duration-300 focus:shadow-lg focus:shadow-primary/20 resize-none"
         />
         <Button 
           onClick={handleGenerate} 
-          className="w-full"
+          className="w-full rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/20
+            active:scale-95 bg-gradient-to-r from-primary to-primary/80"
           disabled={isGenerating}
         >
           {isGenerating ? (
@@ -150,15 +160,19 @@ export default function Generate() {
               Generating...
             </>
           ) : (
-            "Generate Image"
+            <>
+              <Wand2 className="mr-2 h-4 w-4" />
+              Generate Image
+            </>
           )}
         </Button>
       </div>
 
       {generatedImage && (
-        <div className="space-y-4">
-          <h2 className="text-2xl font-semibold">Generated Image</h2>
-          <div className="border rounded-lg overflow-hidden">
+        <div className="space-y-4 animate-fade-in">
+          <h2 className="text-2xl font-semibold gradient-text">Generated Image</h2>
+          <div className="rounded-3xl overflow-hidden border backdrop-blur-sm hover:shadow-2xl 
+            transition-all duration-300 hover:-translate-y-1">
             <img 
               src={generatedImage} 
               alt="Generated" 
@@ -167,7 +181,8 @@ export default function Generate() {
           </div>
           <Button
             onClick={handleDownload}
-            className="w-full"
+            className="w-full rounded-2xl transition-all duration-300 hover:shadow-lg 
+              active:scale-95 border-2"
             variant="outline"
           >
             <Download className="mr-2 h-4 w-4" />
