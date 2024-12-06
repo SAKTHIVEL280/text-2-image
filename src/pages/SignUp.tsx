@@ -5,10 +5,13 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
 import { ArrowLeft } from "lucide-react";
+import { AuthHeader } from "@/components/AuthHeader";
 
 export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
+  const [showOtpInput, setShowOtpInput] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -38,10 +41,38 @@ export default function SignUp() {
       if (error) throw error;
 
       toast({
-        title: "Welcome aboard!",
-        description: "Please check your email to verify your account.",
+        title: "Check your email",
+        description: "We've sent you a verification code.",
       });
-      
+      setShowOtpInput(true);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const verifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.verifyOtp({
+        email,
+        token: otp,
+        type: 'signup'
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Success!",
+        description: "Your account has been verified. You can now sign in.",
+      });
       navigate("/signin");
     } catch (error: any) {
       toast({
@@ -66,49 +97,71 @@ export default function SignUp() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         
-        <div className="space-y-2 text-center">
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50 animate-fade-in">
-            Create Account
-          </h1>
-          <p className="text-muted-foreground animate-fade-in delay-100">
-            Start your creative journey today
-          </p>
-        </div>
+        <AuthHeader 
+          title="Create Account"
+          subtitle="Start your creative journey today"
+        />
 
-        <form onSubmit={handleSignUp} className="space-y-6 animate-fade-in delay-200">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="rounded-xl transition-all duration-300 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
-                disabled={isLoading}
-              />
+        {!showOtpInput ? (
+          <form onSubmit={handleSignUp} className="space-y-6 animate-fade-in delay-200">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="rounded-xl transition-all duration-300 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
+                  disabled={isLoading}
+                />
+              </div>
+              <div className="space-y-2">
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="rounded-xl transition-all duration-300 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
+                  disabled={isLoading}
+                />
+              </div>
             </div>
-            <div className="space-y-2">
-              <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="rounded-xl transition-all duration-300 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
-                disabled={isLoading}
-              />
+            
+            <Button 
+              type="submit" 
+              className="w-full rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-primary/25"
+              disabled={isLoading}
+            >
+              {isLoading ? "Creating Account..." : "Sign Up"}
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={verifyOtp} className="space-y-6 animate-fade-in delay-200">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Input
+                  type="text"
+                  placeholder="Enter verification code"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                  required
+                  className="rounded-xl transition-all duration-300 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
+                  disabled={isLoading}
+                />
+              </div>
             </div>
-          </div>
-          
-          <Button 
-            type="submit" 
-            className="w-full rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-primary/25"
-            disabled={isLoading}
-          >
-            {isLoading ? "Creating Account..." : "Sign Up"}
-          </Button>
-        </form>
+            
+            <Button 
+              type="submit" 
+              className="w-full rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-primary/25"
+              disabled={isLoading}
+            >
+              {isLoading ? "Verifying..." : "Verify Email"}
+            </Button>
+          </form>
+        )}
 
         <div className="text-center animate-fade-in delay-300">
           <Button 
