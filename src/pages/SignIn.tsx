@@ -24,11 +24,26 @@ export default function SignIn() {
 
       if (error) {
         if (error.message === "Invalid login credentials") {
-          toast({
-            variant: "destructive",
-            title: "Invalid credentials",
-            description: "Please check your email and password, or sign up if you don't have an account.",
+          // Check if the email exists first
+          const { data: emailCheck } = await supabase.auth.signInWithOtp({
+            email,
+            shouldCreateUser: false,
           });
+          
+          if (emailCheck) {
+            toast({
+              variant: "destructive",
+              title: "Incorrect Password",
+              description: "The password you entered is incorrect. Please try again.",
+            });
+          } else {
+            toast({
+              variant: "destructive",
+              title: "Email Not Found",
+              description: "This email is not registered. Would you like to create an account?",
+              action: <Button onClick={() => navigate("/signup")} variant="outline" size="sm">Sign Up</Button>
+            });
+          }
         } else {
           toast({
             variant: "destructive",
@@ -36,6 +51,7 @@ export default function SignIn() {
             description: error.message,
           });
         }
+        setIsLoading(false);
         return;
       }
 
