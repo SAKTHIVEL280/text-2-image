@@ -27,7 +27,9 @@ export default function SignIn() {
           // Check if the email exists first
           const { data: emailCheck } = await supabase.auth.signInWithOtp({
             email,
-            shouldCreateUser: false,
+            options: {
+              shouldCreateUser: false
+            }
           });
           
           if (emailCheck) {
