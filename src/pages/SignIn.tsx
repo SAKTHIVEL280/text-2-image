@@ -25,14 +25,12 @@ export default function SignIn() {
       if (error) {
         if (error.message === "Invalid login credentials") {
           // Check if the email exists first
-          const { data, error: otpError } = await supabase.auth.signInWithOtp({
+          const { data: emailCheck } = await supabase.auth.signInWithOtp({
             email,
-            options: {
-              shouldCreateUser: false
-            }
+            shouldCreateUser: false,
           });
           
-          if (!otpError) {
+          if (emailCheck) {
             toast({
               variant: "destructive",
               title: "Incorrect Password",
