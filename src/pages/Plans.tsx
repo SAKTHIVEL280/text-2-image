@@ -70,10 +70,10 @@ export default function Plans() {
           title: "Demo Mode",
           description: "This is a demo. In a real app, payment processing would occur here.",
         });
-        navigate("/signin");
+        navigate("/generate");
       }, 2000);
     } else {
-      navigate("/signin");
+      navigate("/generate");
     }
   };
 

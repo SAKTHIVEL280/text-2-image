@@ -35,19 +35,26 @@ export default function SignUp() {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message,
+        });
+        return;
+      }
 
       toast({
-        title: "Welcome aboard!",
-        description: "Please check your email to verify your account.",
+        title: "Success!",
+        description: "Please check your email to verify your account before signing in.",
       });
       
       navigate("/signin");
-    } catch (error: any) {
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
       });
     } finally {
       setIsLoading(false);
@@ -55,67 +62,47 @@ export default function SignUp() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background/80 to-muted/50">
-      <div className="auth-card w-full max-w-md space-y-8 animate-fade-in">
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="auth-card w-full max-w-md space-y-6">
         <Button 
           variant="ghost" 
-          size="icon"
+          className="absolute top-4 left-4"
           onClick={() => navigate(-1)}
-          className="absolute top-4 left-4 rounded-full hover:scale-110 transition-all duration-300 hover:bg-background/80"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back
         </Button>
-        
         <div className="space-y-2 text-center">
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50 animate-fade-in">
-            Create Account
-          </h1>
-          <p className="text-muted-foreground animate-fade-in delay-100">
-            Start your creative journey today
-          </p>
+          <h1 className="text-3xl font-bold gradient-text">Create Account</h1>
+          <p className="text-muted-foreground">Start your creative journey today</p>
         </div>
-
-        <form onSubmit={handleSignUp} className="space-y-6 animate-fade-in delay-200">
-          <div className="space-y-4">
-            <div className="space-y-2">
-              <Input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="rounded-xl transition-all duration-300 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
-                disabled={isLoading}
-              />
-            </div>
-            <div className="space-y-2">
-              <Input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="rounded-xl transition-all duration-300 focus:ring-2 focus:ring-primary/50 hover:border-primary/50"
-                disabled={isLoading}
-              />
-            </div>
+        <form onSubmit={handleSignUp} className="space-y-4">
+          <div className="space-y-2">
+            <Input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              disabled={isLoading}
+            />
           </div>
-          
-          <Button 
-            type="submit" 
-            className="w-full rounded-xl bg-gradient-to-r from-primary to-primary/80 hover:scale-[1.02] transition-all duration-300 hover:shadow-lg hover:shadow-primary/25"
-            disabled={isLoading}
-          >
+          <div className="space-y-2">
+            <Input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              disabled={isLoading}
+            />
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading}>
             {isLoading ? "Creating Account..." : "Sign Up"}
           </Button>
         </form>
-
-        <div className="text-center animate-fade-in delay-300">
-          <Button 
-            variant="link" 
-            onClick={() => navigate("/signin")}
-            className="text-muted-foreground hover:text-primary transition-colors duration-300"
-          >
+        <div className="text-center">
+          <Button variant="link" onClick={() => navigate("/signin")}>
             Already have an account? Sign in
           </Button>
         </div>
