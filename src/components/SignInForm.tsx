@@ -28,14 +28,7 @@ export function SignInForm() {
         description: "Successfully signed in.",
       });
       
-      const selectedPlan = localStorage.getItem('selectedPlan');
-      if (selectedPlan === 'Premium') {
-        // For premium users, redirect to payment first
-        navigate('/payment');
-      } else {
-        // For free users, go directly to generate
-        navigate('/generate');
-      }
+      navigate('/plans');
     } catch (error: any) {
       toast({
         variant: "destructive",

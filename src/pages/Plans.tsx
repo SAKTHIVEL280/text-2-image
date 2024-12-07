@@ -63,9 +63,9 @@ export default function Plans() {
   const handlePlanSelect = async (planName: string) => {
     const { data: { session } } = await supabase.auth.getSession();
     
+    localStorage.setItem('selectedPlan', planName);
+    
     if (!session) {
-      // Store selected plan in localStorage
-      localStorage.setItem('selectedPlan', planName);
       navigate('/signin');
       return;
     }
