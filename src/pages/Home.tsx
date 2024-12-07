@@ -51,11 +51,18 @@ export default function Home() {
         
         <div className="flex gap-4 justify-center animate-fade-in" style={{ animationDelay: "800ms" }}>
           <Button 
-            onClick={() => navigate("/plans")} 
+            onClick={() => navigate("/signin")} 
             size="lg"
             className="rounded-2xl hover:scale-105 active:scale-95 transition-all duration-300 
               bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600
               shadow-lg hover:shadow-xl hover:shadow-primary/20">
+            Get Started
+          </Button>
+          <Button 
+            onClick={() => navigate("/plans")} 
+            size="lg"
+            variant="outline"
+            className="rounded-2xl hover:scale-105 active:scale-95 transition-all duration-300">
             View Plans
           </Button>
         </div>

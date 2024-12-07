@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Wand2 } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { supabase } from "@/lib/supabase";
 
 interface GenerateFormProps {
   onGenerate: (prompt: string, imageStyle: string, orientation: string) => void;
@@ -15,18 +14,13 @@ export function GenerateForm({ onGenerate, isGenerating }: GenerateFormProps) {
   const [imageStyle, setImageStyle] = useState("realistic");
   const [isPremium, setIsPremium] = useState(false);
 
-  // Check if user has premium plan
   useEffect(() => {
-    const checkPremium = async () => {
-      const selectedPlan = localStorage.getItem('selectedPlan');
-      setIsPremium(selectedPlan === 'Premium');
-    };
-    checkPremium();
+    const selectedPlan = localStorage.getItem('selectedPlan');
+    setIsPremium(selectedPlan === 'Premium');
   }, []);
 
   const handleSubmit = () => {
     if (prompt.trim()) {
-      // Use fixed dimensions based on plan
       const orientation = isPremium ? '1080x1080' : '512x512';
       onGenerate(prompt, imageStyle, orientation);
     }
@@ -90,7 +84,7 @@ export function GenerateForm({ onGenerate, isGenerating }: GenerateFormProps) {
         ) : (
           <>
             <Wand2 className="mr-2 h-4 w-4" />
-            Generate Image ({isPremium ? '1080x1080' : '512x512'})
+            Generate Image
           </>
         )}
       </Button>
