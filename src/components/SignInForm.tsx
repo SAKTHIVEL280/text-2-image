@@ -30,12 +30,10 @@ export function SignInForm() {
       
       const selectedPlan = localStorage.getItem('selectedPlan');
       if (selectedPlan === 'Premium') {
-        toast({
-          title: "Premium Plan Selected",
-          description: "Redirecting to payment...",
-        });
-        setTimeout(() => navigate('/generate'), 2000);
+        // For premium users, redirect to payment first
+        navigate('/payment');
       } else {
+        // For free users, go directly to generate
         navigate('/generate');
       }
     } catch (error: any) {

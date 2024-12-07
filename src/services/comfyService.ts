@@ -7,14 +7,18 @@ interface ComfyWorkflowInput {
 export const generateImage = async ({ prompt, imageStyle, orientation }: ComfyWorkflowInput) => {
   const baseUrl = 'http://127.0.0.1:8188';
   
+  // Get the selected plan from localStorage
+  const selectedPlan = localStorage.getItem('selectedPlan');
+  const dimensions = selectedPlan === 'Premium' ? 1080 : 512;
+  
   // Prepare the workflow inputs
   const workflowInputs = {
     "6": { // CLIP Text Encode node
       "text": `${imageStyle} style, ${prompt}`
     },
     "5": { // Empty Latent Image node
-      "width": orientation === "landscape" ? 768 : 512,
-      "height": orientation === "landscape" ? 512 : 768,
+      "width": dimensions,
+      "height": dimensions,
       "batch_size": 1
     }
   };
