@@ -24,7 +24,7 @@ export default function SignIn() {
           subtitle="Sign in to continue your creative journey"
         />
 
-        <SignInForm onSuccess={() => navigate("/")} />
+        <SignInForm />
 
         <div className="text-center animate-fade-in delay-300">
           <Button 

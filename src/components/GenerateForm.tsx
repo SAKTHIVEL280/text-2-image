@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Wand2 } from "lucide-react";
@@ -16,7 +16,7 @@ export function GenerateForm({ onGenerate, isGenerating }: GenerateFormProps) {
   const [isPremium, setIsPremium] = useState(false);
 
   // Check if user has premium plan
-  useState(() => {
+  useEffect(() => {
     const checkPremium = async () => {
       const selectedPlan = localStorage.getItem('selectedPlan');
       setIsPremium(selectedPlan === 'Premium');
