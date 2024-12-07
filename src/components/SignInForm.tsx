@@ -3,15 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { supabase } from "@/lib/supabase";
+import { useNavigate } from "react-router-dom";
 
-interface SignInFormProps {
-  onSuccess: () => void;
-}
-
-export function SignInForm({ onSuccess }: SignInFormProps) {
+export function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +27,9 @@ export function SignInForm({ onSuccess }: SignInFormProps) {
         title: "Welcome back!",
         description: "Successfully signed in.",
       });
-      onSuccess();
+      
+      // Navigate to generate page after successful sign in
+      navigate("/generate");
     } catch (error: any) {
       toast({
         variant: "destructive",
