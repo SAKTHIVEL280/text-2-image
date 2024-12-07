@@ -28,8 +28,16 @@ export function SignInForm() {
         description: "Successfully signed in.",
       });
       
-      // Navigate to generate page after successful sign in
-      navigate("/generate");
+      const selectedPlan = localStorage.getItem('selectedPlan');
+      if (selectedPlan === 'Premium') {
+        toast({
+          title: "Premium Plan Selected",
+          description: "Redirecting to payment...",
+        });
+        setTimeout(() => navigate('/generate'), 2000);
+      } else {
+        navigate('/generate');
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",

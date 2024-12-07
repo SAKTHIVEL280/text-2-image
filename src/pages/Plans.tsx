@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/use-toast";
 import { ArrowRight, Sparkles, Crown, ArrowLeft } from "lucide-react";
+import { supabase } from "@/lib/supabase";
 
 const plans = [
   {
@@ -59,7 +60,16 @@ const exampleImages = [
 export default function Plans() {
   const navigate = useNavigate();
 
-  const handlePlanSelect = (planName: string) => {
+  const handlePlanSelect = async (planName: string) => {
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      // Store selected plan in localStorage
+      localStorage.setItem('selectedPlan', planName);
+      navigate('/signin');
+      return;
+    }
+
     if (planName === "Premium") {
       toast({
         title: "Processing Payment",
@@ -70,10 +80,10 @@ export default function Plans() {
           title: "Demo Mode",
           description: "This is a demo. In a real app, payment processing would occur here.",
         });
-        navigate("/signin");
+        navigate("/generate");
       }, 2000);
     } else {
-      navigate("/signin");
+      navigate("/generate");
     }
   };
 
@@ -147,31 +157,6 @@ export default function Plans() {
               </Card>
             );
           })}
-        </div>
-
-        <div className="space-y-8">
-          <div className="text-center">
-            <h2 className="text-3xl font-bold gradient-text">Example Generations</h2>
-            <p className="text-muted-foreground mt-2">
-              Discover what you can create with our AI image generation
-            </p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {exampleImages.map((image) => (
-              <div key={image.alt} className="space-y-3 group">
-                <div className="overflow-hidden rounded-3xl border backdrop-blur-sm 
-                  hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-                  <img
-                    src={image.url}
-                    alt={image.alt}
-                    className="w-full h-64 object-cover transition-transform duration-300 
-                      group-hover:scale-105"
-                  />
-                </div>
-                <p className="text-center font-medium">{image.caption}</p>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className="text-center space-y-4 pb-8">

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Wand2, LayoutPanelLeft, LayoutPanelTop } from "lucide-react";
+import { Wand2 } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { supabase } from "@/lib/supabase";
 
 interface GenerateFormProps {
   onGenerate: (prompt: string, imageStyle: string, orientation: string) => void;
@@ -12,10 +13,21 @@ interface GenerateFormProps {
 export function GenerateForm({ onGenerate, isGenerating }: GenerateFormProps) {
   const [prompt, setPrompt] = useState("");
   const [imageStyle, setImageStyle] = useState("realistic");
-  const [orientation, setOrientation] = useState("landscape");
+  const [isPremium, setIsPremium] = useState(false);
+
+  // Check if user has premium plan
+  useState(() => {
+    const checkPremium = async () => {
+      const selectedPlan = localStorage.getItem('selectedPlan');
+      setIsPremium(selectedPlan === 'Premium');
+    };
+    checkPremium();
+  }, []);
 
   const handleSubmit = () => {
     if (prompt.trim()) {
+      // Use fixed dimensions based on plan
+      const orientation = isPremium ? '1080x1080' : '512x512';
       onGenerate(prompt, imageStyle, orientation);
     }
   };
@@ -54,33 +66,6 @@ export function GenerateForm({ onGenerate, isGenerating }: GenerateFormProps) {
             </ToggleGroupItem>
           </ToggleGroup>
         </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">Image Orientation</label>
-          <ToggleGroup 
-            type="single" 
-            value={orientation} 
-            onValueChange={(value) => value && setOrientation(value)} 
-            className="justify-start gap-2"
-          >
-            <ToggleGroupItem 
-              value="landscape" 
-              aria-label="Landscape"
-              className="rounded-full data-[state=on]:bg-primary/20 hover:bg-primary/10 transition-all duration-300 hover:scale-105"
-            >
-              <LayoutPanelLeft className="h-4 w-4 mr-2" />
-              Landscape
-            </ToggleGroupItem>
-            <ToggleGroupItem 
-              value="portrait" 
-              aria-label="Portrait"
-              className="rounded-full data-[state=on]:bg-primary/20 hover:bg-primary/10 transition-all duration-300 hover:scale-105"
-            >
-              <LayoutPanelTop className="h-4 w-4 mr-2" />
-              Portrait
-            </ToggleGroupItem>
-          </ToggleGroup>
-        </div>
       </div>
 
       <Textarea
@@ -105,7 +90,7 @@ export function GenerateForm({ onGenerate, isGenerating }: GenerateFormProps) {
         ) : (
           <>
             <Wand2 className="mr-2 h-4 w-4" />
-            Generate Image
+            Generate Image ({isPremium ? '1080x1080' : '512x512'})
           </>
         )}
       </Button>
