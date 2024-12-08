@@ -34,7 +34,7 @@ export default function SignUp() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/signin`,
+          emailRedirectTo: undefined, // Remove redirect URL to force OTP
         },
       });
 
