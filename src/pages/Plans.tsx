@@ -63,13 +63,18 @@ export default function Plans() {
   const handlePlanSelect = async (planName: string) => {
     const { data: { session } } = await supabase.auth.getSession();
     
-    localStorage.setItem('selectedPlan', planName);
-    
     if (!session) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to continue",
+      });
+      localStorage.setItem('selectedPlan', planName);
       navigate('/signin');
       return;
     }
 
+    localStorage.setItem('selectedPlan', planName);
+    
     if (planName === "Premium") {
       toast({
         title: "Processing Payment",
@@ -170,4 +175,4 @@ export default function Plans() {
       </div>
     </div>
   );
-}
+};
