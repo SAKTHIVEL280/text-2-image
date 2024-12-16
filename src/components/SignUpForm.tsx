@@ -41,6 +41,9 @@ export function SignUpForm({
         password,
         options: {
           emailRedirectTo: undefined,
+          data: {
+            email_confirm_method: 'otp'
+          }
         },
       });
 

@@ -24,7 +24,9 @@ export default function Home() {
       animate-gradient-xy backdrop-blur-sm">
       <div className="max-w-4xl w-full text-center space-y-12 animate-fade-in">
         <div className="space-y-4 hover-card p-8 rounded-3xl transition-all duration-700">
-          <h1 className="text-6xl font-bold gradient-text animate-float">T2I - Text 2 Image</h1>
+          <h1 className="text-6xl font-bold gradient-text animate-float whitespace-nowrap">
+            T2I - Text 2 Image
+          </h1>
           <p className="text-2xl text-muted-foreground animate-fade-in delay-200">
             Transform your imagination into stunning visuals with the power of AI
           </p>
