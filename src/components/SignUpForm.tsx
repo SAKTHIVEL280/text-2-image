@@ -36,14 +36,6 @@ export function SignUpForm({
     setIsLoading(true);
 
     try {
-      // First check if Supabase is accessible
-      const { data: healthCheck, error: healthError } = await supabase.from('health_check').select('*').limit(1).single();
-      
-      if (healthError) {
-        console.error('Supabase connection error:', healthError);
-        throw new Error('Unable to connect to the authentication service. Please try again later.');
-      }
-
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -68,12 +60,22 @@ export function SignUpForm({
         setShowOtpInput(true);
       }
     } catch (error: any) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: error.message || "Failed to create account. Please try again.",
-      });
       console.error('Detailed signup error:', error);
+      
+      // Handle network errors specifically
+      if (error.message === 'Failed to fetch') {
+        toast({
+          variant: "destructive",
+          title: "Connection Error",
+          description: "Unable to connect to the authentication service. Please check your internet connection and try again.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: error.message || "Failed to create account. Please try again.",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
