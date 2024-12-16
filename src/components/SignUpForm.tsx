@@ -36,30 +36,44 @@ export function SignUpForm({
     setIsLoading(true);
 
     try {
-      const { error } = await supabase.auth.signUp({
+      // First check if Supabase is accessible
+      const { data: healthCheck, error: healthError } = await supabase.from('health_check').select('*').limit(1).single();
+      
+      if (healthError) {
+        console.error('Supabase connection error:', healthError);
+        throw new Error('Unable to connect to the authentication service. Please try again later.');
+      }
+
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: undefined,
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
           data: {
             email_confirm_method: 'otp'
           }
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Signup error:', error);
+        throw error;
+      }
 
-      toast({
-        title: "Check your email",
-        description: "We've sent you a verification code.",
-      });
-      setShowOtpInput(true);
+      if (data?.user) {
+        toast({
+          title: "Check your email",
+          description: "We've sent you a verification code.",
+        });
+        setShowOtpInput(true);
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to create account. Please try again.",
       });
+      console.error('Detailed signup error:', error);
     } finally {
       setIsLoading(false);
     }
